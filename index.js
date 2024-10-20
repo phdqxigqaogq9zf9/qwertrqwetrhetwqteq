@@ -34,7 +34,7 @@ client.once('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
 
-client.login('YOUR_DISCORD_BOT_TOKEN'); // Replace with your actual Discord bot token
+client.login('token'); // Replace with your actual Discord bot token
 
 const express = require("express");
 const app = express();
