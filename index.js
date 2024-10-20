@@ -1,3 +1,41 @@
+const { execSync } = require('child_process');
+
+function install(packageName) {
+    console.log(`Installing ${packageName}...`);
+    execSync(`npm install ${packageName}`, { stdio: 'inherit' });
+}
+
+function tryRequire(packageName) {
+    try {
+        return require(packageName);
+    } catch (err) {
+        if (err.code === 'MODULE_NOT_FOUND') {
+            install(packageName);
+            return require(packageName); // Try again after installing
+        } else {
+            throw err;
+        }
+    }
+}
+
+// Automatically install and require 'express' and 'discord.js'
+const express = tryRequire('express');
+const Discord = tryRequire('discord.js');
+
+// Example usage of express
+const app = express();
+app.get('/', (req, res) => res.send('Hello World!'));
+app.listen(3000, () => console.log('Express server running on port 3000'));
+
+// Example usage of discord.js
+const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS] });
+
+client.once('ready', () => {
+    console.log(`Logged in as ${client.user.tag}!`);
+});
+
+client.login('YOUR_DISCORD_BOT_TOKEN'); // Replace with your actual Discord bot token
+
 const express = require("express");
 const app = express();
 const keepAlive = require('./server'); // Import the keepAlive function
